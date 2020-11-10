@@ -18,27 +18,48 @@ public abstract class Scope{
 
 	static public class Type {
 
-		public InnerType type;
+		public final InnerType type;
 
 		public Type(InnerType type) {
+			assert(type != InnerType.PTR);
 			this.type = type;
+			this.wrappedType = null;
 		}
 
-		Type wrappedType;
-
-		public void setWrappedType(Type t) {
-			wrappedType = t;
+		private Type(InnerType type, Type wrappedType) {
+			this.type = type;
+			this.wrappedType = wrappedType;
 		}
+
+		public static Type pointerToType(Type wrappedType) {
+			return new Type(InnerType.PTR, wrappedType);
+		}
+
+		final Type wrappedType;
 		
 		public Type getWrappedType() {
 			return wrappedType;
 		}
 
+		@Override
 		public String toString() {
 			if (type != InnerType.PTR) {
 				return type.toString();
 			} else {
 				return "PTR to " + wrappedType.toString();
+			}
+		}
+
+		@Override
+		public boolean equals(Object other) {
+			if (other instanceof Type) {
+				if (type != InnerType.PTR) {
+					return this.type == ((Type) other).type;
+				} else {
+					return this.wrappedType.equals(((Type) other).getWrappedType());
+				}
+			} else {
+				return false;
 			}
 		}
 	}

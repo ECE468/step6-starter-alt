@@ -15,8 +15,7 @@ public class AddrOfNode extends ExpressionNode {
 	public AddrOfNode(ExpressionNode expr) {
 		this.setExpr(expr);
 		//Fix the type up. If the type of expr is T, the type of this is * T
-		this.setType(new Scope.Type(Scope.InnerType.PTR));
-		this.type.setWrappedType(expr.getType());
+		this.setType(Scope.Type.pointerToType(expr.getType()));
 	}
 
 	@Override

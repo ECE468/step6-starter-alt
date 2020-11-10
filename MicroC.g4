@@ -54,7 +54,7 @@ var_decl : type id ';' {st.addVariable($type.t, $id.text);};
 str_decl : 'string' id '=' val= STR_LITERAL ';' {st.addVariable(new Scope.Type(Scope.InnerType.STRING), $id.text, $val.text);};
 
 type returns [Scope.Type t] : base_type {$t = $base_type.t;}
-          | t1=type '*' {$t = new Scope.Type(Scope.InnerType.PTR); $t.setWrappedType($t1.t);};
+          | t1=type '*' {$t = Scope.Type.pointerToType($t1.t);};
 
 base_type returns [Scope.Type t]: 'int' {$t = new Scope.Type(Scope.InnerType.INT);}| 'float' {$t = new Scope.Type(Scope.InnerType.FLOAT);};
 
